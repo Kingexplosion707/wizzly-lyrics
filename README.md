@@ -6,7 +6,7 @@
 
 Lightweight desktop companion built with Rust & Tauri — bringing a customizable glass Dock, interactive Notch/Dynamic Island, and instant Spotlight search to Windows.
 
-[Download Latest Release](https://github.com/loganmaxx/wizzly/releases/latest) · [Report a Bug](https://github.com/loganmaxx/wizzly/issues) · [Support Wizzly](#support--donate)
+[Download Latest Release](https://github.com/loganmaxx/wizzly/releases/latest) · [Privacy & Data](#privacy--data) · [Report a Bug](https://github.com/loganmaxx/wizzly/issues) · [Support Wizzly](#support--donate)
 
 </div>
 
@@ -57,6 +57,23 @@ Lightweight desktop companion built with Rust & Tauri — bringing a customizabl
 
 - **OS:** Windows 10 / Windows 11 (64-bit)
 - **Runtime:** Microsoft Edge WebView2 Runtime (already pre-installed on Windows 11 and most Windows 10 systems)
+
+---
+
+## Privacy & Data
+
+Wizzly is built to run **locally on your PC** with **no ads, no analytics, and no telemetry**.
+
+### What Wizzly Accesses Locally (Never Leaves Your Device)
+- **Installed Apps, Running Windows & Shortcuts** — Used locally to populate the Dock, Launchpad, and Spotlight search (`Alt + Space`).
+- **Windows Notifications** — Read locally via Windows `UserNotificationListener` to display incoming alert previews in the Notch.
+- **Clipboard History & File Shelf** — Stored locally on your device so you can search, pin, or drag items from the Notch, and can be cleared anytime.
+- **System Controls (Audio, Wi-Fi, Bluetooth, Battery, Wallpaper)** — Accessed via local Windows APIs to power the Dock status panels, per-app volume mixer, and wallpaper tinting.
+- **App Settings & Notes** — Saved locally on your PC (`%APPDATA%\com.wizzly.app` and local app storage).
+
+### External Network Requests
+- **Synced Lyrics (`lrclib.net`)** — When fetching lyrics for a playing track, Wizzly sends only the track title, artist, album, and duration to the public [LRCLIB](https://lrclib.net) API.
+- **No personal data, clipboard contents, notifications, or usage logs are ever sent to any server.**
 
 ---
 
