@@ -6,7 +6,7 @@
 
 Lightweight desktop companion built with Rust & Tauri — bringing a customizable glass Dock, interactive Notch/Dynamic Island, and instant Spotlight search to Windows.
 
-[Download Latest Release](https://github.com/loganmaxx/wizzly/releases/latest) · [Report a Bug](https://github.com/loganmaxx/wizzly/issues) · [Request a Feature](https://github.com/loganmaxx/wizzly/issues)
+[Download Latest Release](https://github.com/loganmaxx/wizzly/releases/latest) · [Report a Bug](https://github.com/loganmaxx/wizzly/issues) · [Support Wizzly](#support--donate)
 
 </div>
 
@@ -57,6 +57,20 @@ Lightweight desktop companion built with Rust & Tauri — bringing a customizabl
 
 - **OS:** Windows 10 / Windows 11 (64-bit)
 - **Runtime:** Microsoft Edge WebView2 Runtime (already pre-installed on Windows 11 and most Windows 10 systems)
+
+---
+
+## Support & Donate
+
+Wizzly is free to download and use. If you enjoy using it and want to support future updates, you can support the project via:
+
+- **PayPal:** [paypal.me/adrn87](https://paypal.me/adrn87)
+- **Binance Pay (UID):** `977044132`
+- **QRIS (Indonesia):**
+
+<p align="left">
+  <img src="assets/qris.png" alt="Wizzly QRIS Donate" width="220" />
+</p>
 
 ---
 
