@@ -12,9 +12,9 @@ Lightweight desktop companion built with Rust & Tauri — bringing a customizabl
 
 ---
 
-<!-- Optional: upload screenshots/GIFs into an `assets/` folder in this repo and embed them here, e.g.:
-![Wizzly Preview](assets/preview.png)
--->
+<p align="center">
+  <img src="assets/preview.jpg" alt="Wizzly Desktop Preview" width="850" />
+</p>
 
 ## Features
 
