@@ -1,5 +1,33 @@
 <div align="center">
 
+## 🌶 Spicy Lyrics for Wizzly (this fork)
+
+</div>
+
+This fork adds **Spicy Lyrics** to Wizzly without changing Wizzly itself:
+
+- **Dynamic Island, closed:** the line being sung, word by word, **all the time** (the island widens to fit) or **only in lyrics mode** — your choice.
+- **Dynamic Island, opened** and the **karaoke window:** Spicy-style word-by-word lyrics with interlude dots; click a line to jump there.
+- **Spotify Canvas** as the background and **Apple Music animated covers** on every Wizzly cover: island (closed and open), karaoke window, Control Center media card, track alerts.
+- Word-by-word lyrics from Spotify (with the Live Lyrics relay), else Apple Music / Spicy Lyrics syncs, else LRCLIB.
+- Settings: the 🌶 button in the island's lyrics view or the karaoke window.
+
+**Install** (PowerShell, no admin):
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/Kingexplosion707/wizzly-lyrics/main/spicy/install.ps1 | iex
+```
+
+It installs a small loader (Node.js) that starts at sign-in, restarts Wizzly once with WebView2's local debugging port (127.0.0.1 only) and adds [`spicy/spicy-wizzly.js`](spicy/spicy-wizzly.js) to Wizzly's windows. Canvas and animated covers come from the [Live Lyrics relay](https://github.com/Kingexplosion707/Live-Lyrics-for-Wallpaper-Engine) (Spicetify), so install that too for those. Uninstall: `%LOCALAPPDATA%\SpicyWizzly\uninstall.ps1`.
+
+**Wizzly updates:** nothing in Wizzly is patched, so new versions keep the Spicy features. A daily workflow merges the main Wizzly repo into this fork and checks every new release against what the mod uses ([`spicy/COMPAT.md`](spicy/COMPAT.md)); if something changed, it opens an issue.
+
+Wizzly's **desktop widgets** (vinyl, clock, calendar, memo) are drawn natively by `wizzly-native.exe`, not in a web view, so the mod can't reach them; for lyrics on the desktop, use the Live Lyrics wallpaper.
+
+---
+
+<div align="center">
+
 # Wizzly
 
 **macOS-style Dock, Dynamic Island Notch & Spotlight for Windows**

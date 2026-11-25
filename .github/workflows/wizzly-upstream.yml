@@ -1,0 +1,81 @@
+# Follows the main Wizzly repo (loganmaxx/wizzly): merges its changes into this fork and checks
+# every new Wizzly release against what the Spicy mod hooks into. The mod is injected at runtime,
+# so a new Wizzly version gets the Spicy features as long as this check passes; when it fails,
+# an issue lists what changed.
+name: Wizzly upstream
+
+on:
+  schedule:
+    - cron: "17 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  follow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Merge the main Wizzly repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream https://github.com/loganmaxx/wizzly.git
+          git fetch upstream main
+          if ! git merge --no-edit upstream/main; then
+            git merge --abort
+            echo "MERGE_CONFLICT=1" >> "$GITHUB_ENV"
+          fi
+
+      - name: Look for a new Wizzly release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          json=$(curl -fsSL https://api.github.com/repos/loganmaxx/wizzly/releases/latest)
+          tag=$(echo "$json" | jq -r .tag_name)
+          url=$(echo "$json" | jq -r '[.assets[] | select(.name | test("setup\\.exe$"))][0].browser_download_url')
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          if [ "$tag" != "$(cat spicy/WIZZLY_VERSION 2>/dev/null)" ] && [ "$url" != "null" ]; then echo "new=1" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Check the new release against the Spicy mod
+        if: steps.release.outputs.new == '1'
+        id: check
+        run: |
+          sudo apt-get install -y -qq p7zip-full >/dev/null
+          pip install -q pefile brotli
+          mkdir -p /tmp/wz && cd /tmp/wz
+          curl -fsSL -o setup.exe "${{ steps.release.outputs.url }}"
+          7z x -y setup.exe -oinstaller >/dev/null
+          exe=$(find installer -iname 'wizzly.exe' | head -1)
+          python3 -I "$GITHUB_WORKSPACE/spicy/tools/extract_assets.py" "$exe" assets >/dev/null
+          cd "$GITHUB_WORKSPACE"
+          set +e
+          table=$(node spicy/tools/compat.js /tmp/wz/assets)
+          ok=$?
+          set -e
+          { echo "# Spicy Lyrics for Wizzly - compatibility"; echo; echo "Checked against Wizzly **${{ steps.release.outputs.tag }}**."; echo; echo "$table"; } > spicy/COMPAT.md
+          echo "${{ steps.release.outputs.tag }}" > spicy/WIZZLY_VERSION
+          echo "ok=$ok" >> "$GITHUB_OUTPUT"
+
+      - name: Save
+        run: |
+          git add -A spicy/COMPAT.md spicy/WIZZLY_VERSION
+          git diff --cached --quiet || git commit -m "Spicy: checked Wizzly ${{ steps.release.outputs.tag }}"
+          git push
+
+      - name: Report a problem
+        if: env.MERGE_CONFLICT == '1' || steps.check.outputs.ok == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          body="Wizzly ${{ steps.release.outputs.tag }}: "
+          [ "$MERGE_CONFLICT" = "1" ] && body="$body the main repo's changes conflict with this fork (merge by hand). "
+          [ "${{ steps.check.outputs.ok }}" = "1" ] && body="$body some things the Spicy mod uses changed - see spicy/COMPAT.md."
+          gh issue create --title "Wizzly ${{ steps.release.outputs.tag }} needs a Spicy update" --body "$body"
