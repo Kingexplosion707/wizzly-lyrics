@@ -1,0 +1,10 @@
+{
+  "name": "spicy-lyrics-for-wizzly",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Spicy Lyrics in Wizzly's Dynamic Island, karaoke window and covers (runtime mod, Wizzly unchanged on disk).",
+  "main": "loader.js",
+  "scripts": { "start": "node loader.js --start" },
+  "dependencies": { "ws": "^8.18.0" },
+  "license": "MIT"
+}
