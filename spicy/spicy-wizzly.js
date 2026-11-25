@@ -319,9 +319,9 @@
   .karaoke-viewport .spicy-view{font-size:var(--spicy-karaoke-size,26px)}
   .spicy-compact{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center;font-weight:700;font-size:13px;padding:0 8px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
   .spicy-compact .spicy-w{background:linear-gradient(90deg,#fff var(--p,-10%),rgba(255,255,255,.45) calc(var(--p,-10%) + 10%));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .notch-compact-lyric-wrap:has(> .spicy-compact) .notch-compact-lyric-text{opacity:0}
-  .notch-compact-lyric-wrap{position:relative}
-  .notch-compact-lyric-wrap > .spicy-compact{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .notch-compact-lyric-wrap:has(> .spicy-compact) .notch-compact-lyric-text{display:none}
+  .notch-compact-lyric-wrap:has(> .spicy-compact){flex:1 1 auto;width:auto!important;max-width:none!important;min-width:0}
+  .notch-compact-lyric-wrap > .spicy-compact{display:block;line-height:37px}
   .notch-pill.spicy-wide{width:auto!important;min-width:222px;max-width:min(736px,92vw)!important}
   .notch-pill.spicy-wide .notch-compact-clock{display:none}
   .spicy-cv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;pointer-events:none;z-index:2;opacity:0;transition:opacity .6s}
@@ -467,11 +467,11 @@
       compactEl.textContent = "";
       compactEl._words = [];
       if (line) {
+        // The space goes inside the word: in a flex box, bare spaces between words vanish.
         line.words.forEach((w, k) => {
-          if (k) compactEl.appendChild(document.createTextNode(" "));
           const s = document.createElement("span");
           s.className = "spicy-w";
-          s.textContent = w.text;
+          s.textContent = w.text + (k < line.words.length - 1 ? " " : "");
           compactEl.appendChild(s);
           compactEl._words.push({ el: s, w });
         });
@@ -506,6 +506,8 @@
       const row = document.querySelector(".notch-compact-row");
       const expanded = pill && pill.classList.contains("is-expanded");
       if (spicy && mode !== "off" && wrap) {
+        // Wizzly sized the island for its own text: let it fit ours instead.
+        if (pill) pill.classList.add("spicy-wide");
         compactFor(wrap, pos);
       } else if (spicy && mode === "always" && clock && row && !expanded && now.playing) {
         pill.classList.add("spicy-wide");
